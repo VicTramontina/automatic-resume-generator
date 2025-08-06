@@ -1,0 +1,150 @@
+%-------------------------------------------------------------------------------
+% CONFIGURATION
+%-------------------------------------------------------------------------------
+
+\documentclass[11pt, a4paper]{russell}
+
+\usepackage{xcolor}
+
+\geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
+
+\fontdir[fonts/]
+
+\colorlet{russell}{russell-black}
+
+\setbool{acvSectionColorHighlight}{true}
+
+\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+
+%-------------------------------------------------------------------------------
+% PERSONAL INFORMATION
+%-------------------------------------------------------------------------------
+
+\name{Victor Augusto}{Tramontina}
+
+\position{Computer Engineering -- \textbf{Full Stack Developer}}
+
+\mobile{+55 (54) 9 9937-7877}
+
+\email{victor.tramontina@universo.univates.br}
+
+\github{https://github.com/VicTramontina}
+
+% \linkedin{linkedin.com/in/victor-augusto-tramontina-ba3b26299}
+
+
+%-------------------------------------------------------------------------------
+\begin{document}
+
+    \makecvheader
+
+    \makecvfooter{}{Victor Augusto Tramontina}{\thepage}
+
+
+%-------------------------------------------------------------------------------
+% SUMMARY
+%-------------------------------------------------------------------------------
+
+    \cvsection{About Me}
+
+    \begin{cvparagraph}
+        \textbf{Motivated and collaborative full stack developer} with strong problem-solving skills and a solid background in \textbf{backend (Vanilla PHP, SQL)} and \textbf{modern frontend (ReactJS, TailwindCSS, Styled Components)}. Experienced in maintaining legacy systems, refactoring architectures, and integrating \textbf{cloud services (AWS)} and third-party APIs (OAuth2). Frequently leverages \textbf{AI tools and assistants} to support coding, debugging, and technical decision-making. Enthusiastic about learning and sharing knowledge, with an active role in \textbf{team discussions and technology decisions}.
+    \end{cvparagraph}
+
+
+%-------------------------------------------------------------------------------
+% SKILLS
+%-------------------------------------------------------------------------------
+
+    \cvsection{Skills}
+
+    \begin{cvskills}
+        \cvskill{Frontend}{ReactJS, TailwindCSS, Styled Components, React Hook Form, Zod}
+        \cvskill{Backend}{Vanilla PHP, Node, SQL, REST APIs, OAuth2}
+        \cvskill{DevOps \& Tools}{Docker, Git, AWS (EC2, S3, Lambda, Cognito, Amplify), Linux, Crontabs}
+        \cvskill{Mobile}{React Native, Java, Android Studio, SQLite}
+        \cvskill{Integration}{Payment gateways, ERP platforms, Notifications and e-mail systems}
+    \end{cvskills}
+
+
+%-------------------------------------------------------------------------------
+% EXPERIENCE
+%-------------------------------------------------------------------------------
+
+    \cvsection{Professional Experience}
+
+    \begin{cventries}
+        \cventry
+        {\textbf{Full Stack Developer}}
+        {Macro Publicidade -- Conecta Venda System}
+        {Brazil}
+        {2022 -- Present}
+        {
+            \begin{cvitems}
+                \item {Worked in a \textbf{small agile team} (5 members) using \textbf{Scrum methodology}.}
+                \item {Maintained \textbf{legacy PHP systems} and refactored old AngularJS frontends into \textbf{ReactJS}.}
+                \item {Helped architect and implement \textbf{system-wide improvements} in frontend and database models.}
+                \item {Developed \textbf{reusable frontend components} and backend utilities to streamline workflows.}
+                \item {Participated in \textbf{technical decision-making}, mentoring junior teammates, and improving team practices.}
+                \item {Integrated external services using \textbf{OAuth2}, including payment gateways and ERP systems.}
+                \item {Handled \textbf{deployments and environment management} using Docker and AWS.}
+                \item {Contributed to the digital transformation of the company's systems, improving maintainability and scalability.}
+            \end{cvitems}
+        }
+    \end{cventries}
+
+
+%-------------------------------------------------------------------------------
+% PROJECTS
+%-------------------------------------------------------------------------------
+
+    \cvsection{Personal Projects}
+
+    \begin{cventries}
+        \cventry
+        {Guaporé - RS}
+        {Android Ticketing System}
+        {2023}
+        {}
+        {
+            \begin{cvitems}
+                \item {Developed a \textbf{complete Android app} for ticket printing and bar sales management.}
+                \item {Implemented product registration, order creation and report exports.}
+                \item {System is used by \textbf{over 8 companies} in the city.}
+                \item {Technologies used: \textbf{Java, Android Studio, SQLite, Epson SDK}.}
+            \end{cvitems}
+        }
+    \end{cventries}
+
+
+%-------------------------------------------------------------------------------
+% EDUCATION
+%-------------------------------------------------------------------------------
+
+    \cvsection{Education}
+
+    \begin{cventries}
+        \cventry
+        {Computer Engineering}
+        {Univates}
+        {Brazil}
+        {2022 -- Present, \textbf{7th Semester}}
+        {}
+    \end{cventries}
+
+
+%-------------------------------------------------------------------------------
+% LANGUAGES
+%-------------------------------------------------------------------------------
+
+    \cvsection{Languages}
+
+    \begin{cvskills}
+        \cvskill{Portuguese}{\textbf{Native}}
+        \cvskill{English}{\textbf{Advanced}}
+    \end{cvskills}
+
+
+%-------------------------------------------------------------------------------
+\end{document}
