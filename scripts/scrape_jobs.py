@@ -266,6 +266,38 @@ def _scrape_with_infinite_scroll(site: Dict[str, Any], max_jobs: int) -> List[Di
         max_no_new_content_attempts = 3
 
         while len(jobs) < max_jobs:
+            # Try to dismiss any modal overlays that might be blocking interactions
+            try:
+                # Look for common modal close buttons
+                modal_close_selectors = [
+                    "button[aria-label='Dismiss']",
+                    "button[data-tracking-control-name='modal_close']",
+                    ".modal__dismiss",
+                    ".artdeco-modal__dismiss",
+                    "[data-test-modal-close-btn]",
+                    ".modal-close",
+                    "button.modal__close-btn"
+                ]
+
+                for selector in modal_close_selectors:
+                    try:
+                        close_button = driver.find_element(By.CSS_SELECTOR, selector)
+                        if close_button.is_displayed():
+                            print("Found modal overlay, attempting to close...")
+                            close_button.click()
+                            time.sleep(1)
+                            break
+                    except NoSuchElementException:
+                        continue
+
+                # Also try pressing ESC key to close modals
+                driver.find_element(By.TAG_NAME, "body").send_keys("\ue00c")  # ESC key
+                time.sleep(0.5)
+
+            except Exception as e:
+                # Ignore errors when trying to close modals
+                pass
+
             # Get current page content
             soup = BeautifulSoup(driver.page_source, "html.parser")
             job_elements = soup.select(site.get("job_selector", ""))
@@ -314,44 +346,92 @@ def _scrape_with_infinite_scroll(site: Dict[str, Any], max_jobs: int) -> List[Di
                 break
 
             # Try to find and click "Ver mais vagas" button first
+            button_clicked = False
             try:
-                show_more_button = driver.find_element(By.CSS_SELECTOR,
-                    "button.infinite-scroller__show-more-button, " +
-                    "button[aria-label='Ver mais vagas'], " +
-                    "button[data-tracking-control-name='infinite-scroller_show-more']")
+                # Multiple selectors to find the button
+                button_selectors = [
+                    "button.infinite-scroller__show-more-button",
+                    "button[aria-label='Ver mais vagas']",
+                    "button[aria-label='See more jobs']",
+                    "button[data-tracking-control-name='infinite-scroller_show-more']",
+                    ".infinite-scroller__show-more-button--visible"
+                ]
 
-                if show_more_button.is_displayed() and show_more_button.is_enabled():
-                    print("Found 'Ver mais vagas' button. Clicking...")
-                    # Scroll to button to ensure it's clickable
-                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", show_more_button)
-                    time.sleep(1)
-                    show_more_button.click()
-                    print("✓ 'Ver mais vagas' button clicked")
+                for selector in button_selectors:
+                    try:
+                        show_more_button = driver.find_element(By.CSS_SELECTOR, selector)
+
+                        if show_more_button.is_displayed() and show_more_button.is_enabled():
+                            print(f"Found 'Ver mais vagas' button with selector: {selector}")
+
+                            # Scroll to button to ensure it's in view
+                            driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", show_more_button)
+                            time.sleep(1)
+
+                            # Try different click methods
+                            try:
+                                # Method 1: Regular click
+                                show_more_button.click()
+                                print("✓ Button clicked with regular click")
+                                button_clicked = True
+                                break
+                            except Exception:
+                                try:
+                                    # Method 2: JavaScript click
+                                    driver.execute_script("arguments[0].click();", show_more_button)
+                                    print("✓ Button clicked with JavaScript")
+                                    button_clicked = True
+                                    break
+                                except Exception:
+                                    try:
+                                        # Method 3: Action chains click
+                                        from selenium.webdriver.common.action_chains import ActionChains
+                                        ActionChains(driver).move_to_element(show_more_button).click().perform()
+                                        print("✓ Button clicked with ActionChains")
+                                        button_clicked = True
+                                        break
+                                    except Exception as click_error:
+                                        print(f"All click methods failed for {selector}: {click_error}")
+                                        continue
+                    except NoSuchElementException:
+                        continue
+
+                if button_clicked:
                     time.sleep(3)  # Wait for new content to load
                     continue
-            except NoSuchElementException:
-                # No button found, try scrolling
-                pass
+
             except Exception as e:
-                print(f"Error clicking 'Ver mais vagas' button: {e}")
+                print(f"Error handling 'Ver mais vagas' button: {e}")
 
             # If no button found or button click failed, try scrolling
-            print("Scrolling down to load more content...")
-            last_height = driver.execute_script("return document.body.scrollHeight")
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)
+            if not button_clicked:
+                print("Scrolling down to load more content...")
+                last_height = driver.execute_script("return document.body.scrollHeight")
 
-            # Check if scrolling loaded new content
-            new_height = driver.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:
-                print("Page height didn't change after scrolling")
-                # Continue to let the no_new_content_attempts counter handle stopping
+                # Try multiple scroll approaches
+                for scroll_attempt in range(3):
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(1)
+
+                    # Also try scrolling to a specific amount
+                    driver.execute_script(f"window.scrollBy(0, {1000 + scroll_attempt * 500});")
+                    time.sleep(1)
+
+                # Check if scrolling loaded new content
+                new_height = driver.execute_script("return document.body.scrollHeight")
+                if new_height == last_height:
+                    print("Page height didn't change after scrolling")
+                    # Continue to let the no_new_content_attempts counter handle stopping
+                else:
+                    print(f"Page height changed from {last_height} to {new_height}")
 
         print(f"Collected {len(jobs)} jobs with infinite scroll")
         return jobs
 
     except Exception as e:
         print(f"Error during infinite scroll scraping: {e}")
+        import traceback
+        traceback.print_exc()
         return []
     finally:
         driver.quit()
