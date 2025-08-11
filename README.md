@@ -42,16 +42,6 @@ make clean   # Remove containers e imagens Docker
 make help    # Mostra ajuda
 ```
 
-## 🔧 Comandos Avançados
-
-Use o script `docker-run.sh` para comandos customizados:
-
-```bash
-./docker-run.sh python3 scripts/main.py    # Executa comando específico
-./docker-run.sh shell                      # Shell interativo
-./docker-run.sh help                       # Ajuda detalhada
-```
-
 ## 🎯 Configuração
 
 ### API do Gemini
@@ -82,11 +72,3 @@ Edite `config/job_config.yaml` para definir os sites e critérios de busca.
 - **Personalização IA**: Usa Gemini para adaptar currículos
 - **Geração PDF**: Compilação automática com LaTeX
 - **Ambiente Isolado**: Docker elimina problemas de dependências
-
-## 🎉 Vantagens Docker
-
-✅ **Zero configuração local**: Só precisa do Docker  
-✅ **Multiplataforma**: Windows, macOS, Linux  
-✅ **Ambiente consistente**: Funciona igual para todos  
-✅ **Sem conflitos**: Isolado do sistema hospedeiro  
-✅ **Fácil limpeza**: `make clean` remove tudo
