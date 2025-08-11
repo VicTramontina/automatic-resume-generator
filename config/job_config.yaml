@@ -1,37 +1,31 @@
 skills:
-  - Java
-  - Python
-  - SQL
-  - C
-  - C++
-  - Kubernetes
-  - Docker
-  - Microservices
-  - RabbitMQ
-  - Redis
-  - Kafka
+  - name: "SQL"
+    required: true
+
+  - "Docker"
+  - "JavaScript"
+  - "React"
+  - "Node.js"
+  - "Git"
+  - "Linux"
 
 salary:
   usd: 3000
   brl: 6000
 
 sites:
-  - name: Remotar
-    url: "https://www.remotar.com.br/vagas?search=desenvolvedor&modalidade=remoto"
-    job_selector: "div.job-card"
+  - name: LinkedIn
+    url: "https://www.linkedin.com/jobs/search/?keywords=desenvolvedor&location=Brasil&f_WT=2"
+    job_selector: ".job-search-card"
+    max_jobs: 5
+    max_scrolls: 10
     fields:
-      title: "h2"
-      company: ".company"
-      description: ".details"
+      title: ".base-search-card__title"
+      company: ".base-search-card__subtitle"
+      link: ".base-card__full-link"
+    detail_fields:
+      description: ".description__text"
       salary: ".salary"
-      skills: ".tags span"
-  - name: RemoteOK
-    url: "https://remoteok.com/remote-brazil-jobs"
-    job_selector: "tr.job"
-    fields:
-      title: ".company_and_position h2"
-      company: ".companyLink h3"
-      description: ".description"
-      salary: ".salary"
-      skills: ".tags h3"
-
+      seniority: ".description__job-criteria-text"
+    pagination:
+      type: "infinite_scroll"
