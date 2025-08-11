@@ -1,9 +1,37 @@
+skills:
+  - Java
+  - Python
+  - SQL
+  - C
+  - C++
+  - Kubernetes
+  - Docker
+  - Microservices
+  - RabbitMQ
+  - Redis
+  - Kafka
+
+salary:
+  usd: 3000
+  brl: 6000
+
 sites:
-  - name: example
-    url: https://example.com/jobs
-    job_selector: .job
+  - name: Remotar
+    url: "https://www.remotar.com.br/vagas?search=desenvolvedor&modalidade=remoto"
+    job_selector: "div.job-card"
     fields:
-      title: .title
-      description: .description
-      salary: .salary
-      skills: .skills
+      title: "h2"
+      company: ".company"
+      description: ".details"
+      salary: ".salary"
+      skills: ".tags span"
+  - name: RemoteOK
+    url: "https://remoteok.com/remote-brazil-jobs"
+    job_selector: "tr.job"
+    fields:
+      title: ".company_and_position h2"
+      company: ".companyLink h3"
+      description: ".description"
+      salary: ".salary"
+      skills: ".tags h3"
+
