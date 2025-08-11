@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  resume-generator:
+    build: .
+    container_name: curriculo-generator
+    volumes:
+      # Mount the outputs directory to persist generated resumes
+      - ./outputs:/app/outputs
+      # Mount config directory for easy configuration changes
+      - ./config:/app/config
+    environment:
+      - DISPLAY=:99
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    # Keep container running for interactive use
+    stdin_open: true
+    tty: true

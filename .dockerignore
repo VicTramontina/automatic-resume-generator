@@ -1,0 +1,39 @@
+# Ignorar arquivos desnecessários no build Docker
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.git/
+.gitignore
+*.md
+.DS_Store
+Thumbs.db
+
+# Arquivos de instalação local (não mais usados)
+pip-wheel-metadata/
+.tox/
+.coverage
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Arquivos de output que serão regenerados
+outputs/*
+!outputs/.gitkeep
+
+# Logs e arquivos temporários LaTeX
+*.log
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz

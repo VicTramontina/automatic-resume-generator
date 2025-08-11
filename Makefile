@@ -1,23 +1,40 @@
-VENV := .venv
-PYTHON := $(VENV)/bin/python
-PIP := $(VENV)/bin/pip
+.PHONY: build run shell clean help
 
-.PHONY: setup lint run clean
+# Comandos Docker
+build:
+	@echo "🐳 Construindo imagem Docker..."
+	./docker-run.sh build
 
-setup: $(VENV)/bin/activate
+run:
+	@echo "🚀 Executando gerador de currículos com Docker..."
+	./docker-run.sh run
 
-$(VENV)/bin/activate: requirements.txt
-	python3 -m venv $(VENV)
-	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	touch $(VENV)/bin/activate
-
-lint: $(VENV)/bin/activate
-	$(PYTHON) -m py_compile scripts/*.py
-
-run: lint
-	$(PYTHON) scripts/main.py
+shell:
+	@echo "🐚 Abrindo shell interativo no container..."
+	./docker-run.sh shell
 
 clean:
-	rm -rf $(VENV)
-	find outputs -mindepth 1 ! -name ".gitkeep" -delete
+	@echo "🧹 Limpando containers e imagens Docker..."
+	./docker-run.sh clean
+
+# Comando padrão
+all: run
+
+# Ajuda
+help:
+	@echo "📋 Gerador de Currículos - Comandos Docker"
+	@echo ""
+	@echo "COMANDOS DISPONÍVEIS:"
+	@echo "  make build   - Constrói a imagem Docker"
+	@echo "  make run     - Executa o gerador de currículos"
+	@echo "  make shell   - Abre shell interativo no container"
+	@echo "  make clean   - Remove containers e imagens Docker"
+	@echo "  make help    - Mostra esta ajuda"
+	@echo ""
+	@echo "EXEMPLO DE USO:"
+	@echo "  make build && make run"
+	@echo ""
+	@echo "Para comandos avançados: ./docker-run.sh help"
+	@echo ""
+	@echo "🐳 Este projeto usa exclusivamente Docker para eliminar"
+	@echo "   problemas de dependências entre sistemas operacionais."

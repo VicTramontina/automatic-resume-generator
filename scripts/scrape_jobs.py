@@ -164,19 +164,81 @@ def _setup_selenium_driver() -> Optional[webdriver.Chrome]:
         return None
 
     try:
+        print("Setting up Chrome driver for Docker environment...")
+
+        # Check if Chrome and ChromeDriver are available
+        import subprocess
+        try:
+            chrome_version = subprocess.run(["/usr/bin/google-chrome", "--version"],
+                                          capture_output=True, text=True, check=True)
+            print(f"Chrome version: {chrome_version.stdout.strip()}")
+        except Exception as e:
+            print(f"Chrome binary not found: {e}")
+            return None
+
+        try:
+            driver_version = subprocess.run(["/usr/local/bin/chromedriver", "--version"],
+                                          capture_output=True, text=True, check=True)
+            print(f"ChromeDriver version: {driver_version.stdout.strip()}")
+        except Exception as e:
+            print(f"ChromeDriver binary not found: {e}")
+            return None
+
         options = Options()
-        options.add_argument("--headless")  # Run in background
+        options.add_argument("--headless=new")  # Use new headless mode
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-plugins")
+        options.add_argument("--disable-images")
+        options.add_argument("--disable-background-timer-throttling")
+        options.add_argument("--disable-backgrounding-occluded-windows")
+        options.add_argument("--disable-renderer-backgrounding")
+        options.add_argument("--disable-features=TranslateUI,VizDisplayCompositor")
+        options.add_argument("--disable-ipc-flooding-protection")
+        options.add_argument("--disable-background-networking")
+        options.add_argument("--disable-default-apps")
+        options.add_argument("--disable-sync")
+        options.add_argument("--disable-translate")
+        options.add_argument("--hide-scrollbars")
+        options.add_argument("--metrics-recording-only")
+        options.add_argument("--mute-audio")
+        options.add_argument("--no-first-run")
+        options.add_argument("--safebrowsing-disable-auto-update")
+        options.add_argument("--disable-crash-reporter")
+        options.add_argument("--disable-logging")
+        options.add_argument("--disable-permissions-api")
         options.add_argument("--window-size=1920,1080")
-        options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+        options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        
+        # Simplified Docker-specific options
+        options.add_argument("--disable-web-security")
+        options.add_argument("--allow-running-insecure-content")
+        options.add_argument("--disable-software-rasterizer")
+        options.add_argument("--disable-client-side-phishing-detection")
+        options.add_argument("--disable-hang-monitor")
+        options.add_argument("--disable-popup-blocking")
+        options.add_argument("--disable-prompt-on-repost")
+        options.add_argument("--force-color-profile=srgb")
+        options.add_argument("--memory-pressure-off")
+        options.add_argument("--no-zygote")  # Important for Docker
 
-        service = Service(ChromeDriverManager().install())
+        # Use system Google Chrome binary
+        options.binary_location = "/usr/bin/google-chrome"
+
+        # Use system chromedriver
+        service = Service("/usr/local/bin/chromedriver")
+
+        print("Attempting to create Chrome driver instance...")
         driver = webdriver.Chrome(service=service, options=options)
+        print("✅ Chrome driver successfully created!")
         return driver
     except Exception as e:
         print(f"Failed to setup Chrome driver: {e}")
+        print(f"Error type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
