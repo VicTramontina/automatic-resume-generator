@@ -3,6 +3,12 @@ skills:
     required: true
   - name: "TypeScript"
     required: true
+  - name: "PHP"
+    required: true
+  - name: "Docker"
+    required: true
+  - name: "AWS"
+    required: true
   - "SQL"
   - "ReactJS"
   - "TailwindCSS"
@@ -12,9 +18,7 @@ skills:
   - "Node.js"
   - "REST APIs"
   - "OAuth2"
-  - "Docker"
   - "Git"
-  - "AWS"
   - "EC2"
   - "S3"
   - "Lambda"
@@ -39,7 +43,6 @@ sites:
     url: "https://www.linkedin.com/jobs/search?keywords=Desenvolvedor&location=Brasil&geoId=106057199&f_TPR=&f_WT=2&position=1&pageNum=0"
     job_selector: ".job-search-card"
     max_jobs: 150
-    max_scrolls: 50
     fields:
       title: ".base-search-card__title"
       company: ".base-search-card__subtitle"
@@ -55,7 +58,6 @@ sites:
     url: "https://www.linkedin.com/jobs/search?keywords=Developer&location=Estados%20Unidos&geoId=103644278&f_TPR=&f_WT=2&position=1&pageNum=0"
     job_selector: ".job-search-card"
     max_jobs: 150
-    max_scrolls: 50
     fields:
       title: ".base-search-card__title"
       company: ".base-search-card__subtitle"
@@ -66,4 +68,3 @@ sites:
       seniority: ".description__job-criteria-text"
     pagination:
       type: "infinite_scroll"
-

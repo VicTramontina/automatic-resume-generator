@@ -261,16 +261,16 @@ def _scrape_with_infinite_scroll(site: Dict[str, Any], max_jobs: int) -> List[Di
         time.sleep(3)
 
         jobs = []
-        last_height = 0
-        scroll_attempts = 0
-        max_scroll_attempts = site.get("max_scrolls", 10)
+        last_job_count = 0
+        no_new_content_attempts = 0
+        max_no_new_content_attempts = 3
 
-        while len(jobs) < max_jobs and scroll_attempts < max_scroll_attempts:
+        while len(jobs) < max_jobs:
             # Get current page content
             soup = BeautifulSoup(driver.page_source, "html.parser")
             job_elements = soup.select(site.get("job_selector", ""))
 
-            print(f"Scroll {scroll_attempts + 1}: Found {len(job_elements)} total job listings")
+            print(f"Found {len(job_elements)} total job listings on page")
 
             # Process new jobs (skip already processed ones)
             for i, elem in enumerate(job_elements[len(jobs):]):
@@ -294,18 +294,58 @@ def _scrape_with_infinite_scroll(site: Dict[str, Any], max_jobs: int) -> List[Di
                 jobs.append(job)
                 print(f"✓ Job {len(jobs)}/{max_jobs} collected: {job.get('title', 'Unknown title')}")
 
-            # Scroll down to load more content
+            # Check if we got new jobs in this iteration
+            if len(jobs) == last_job_count:
+                no_new_content_attempts += 1
+                print(f"No new jobs found. Attempt {no_new_content_attempts}/{max_no_new_content_attempts}")
+            else:
+                no_new_content_attempts = 0  # Reset counter if we found new jobs
+
+            last_job_count = len(jobs)
+
+            # If we've reached max jobs, stop
+            if len(jobs) >= max_jobs:
+                print(f"Reached maximum jobs limit ({max_jobs})")
+                break
+
+            # If we haven't found new content for several attempts, stop
+            if no_new_content_attempts >= max_no_new_content_attempts:
+                print("No new content found after multiple attempts. Stopping.")
+                break
+
+            # Try to find and click "Ver mais vagas" button first
+            try:
+                show_more_button = driver.find_element(By.CSS_SELECTOR,
+                    "button.infinite-scroller__show-more-button, " +
+                    "button[aria-label='Ver mais vagas'], " +
+                    "button[data-tracking-control-name='infinite-scroller_show-more']")
+
+                if show_more_button.is_displayed() and show_more_button.is_enabled():
+                    print("Found 'Ver mais vagas' button. Clicking...")
+                    # Scroll to button to ensure it's clickable
+                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", show_more_button)
+                    time.sleep(1)
+                    show_more_button.click()
+                    print("✓ 'Ver mais vagas' button clicked")
+                    time.sleep(3)  # Wait for new content to load
+                    continue
+            except NoSuchElementException:
+                # No button found, try scrolling
+                pass
+            except Exception as e:
+                print(f"Error clicking 'Ver mais vagas' button: {e}")
+
+            # If no button found or button click failed, try scrolling
+            print("Scrolling down to load more content...")
+            last_height = driver.execute_script("return document.body.scrollHeight")
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)
 
-            # Check if we've reached the bottom or no new content loaded
+            # Check if scrolling loaded new content
             new_height = driver.execute_script("return document.body.scrollHeight")
             if new_height == last_height:
-                print("No more content to load")
-                break
-
-            last_height = new_height
-            scroll_attempts += 1
+                print("Page height didn't change after scrolling")
+                # Continue to let the no_new_content_attempts counter handle stopping
 
         print(f"Collected {len(jobs)} jobs with infinite scroll")
         return jobs
