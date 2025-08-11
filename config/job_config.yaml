@@ -1,13 +1,34 @@
 skills:
-  - name: "SQL"
+  - name: "JavaScript"
     required: true
-
-  - "Docker"
-  - "JavaScript"
-  - "React"
+  - name: "TypeScript"
+    required: true
+  - "SQL"
+  - "ReactJS"
+  - "TailwindCSS"
+  - "Styled Components"
+  - "React Hook Form"
+  - "Zod"
   - "Node.js"
+  - "REST APIs"
+  - "OAuth2"
+  - "Docker"
   - "Git"
+  - "AWS"
+  - "EC2"
+  - "S3"
+  - "Lambda"
+  - "Cognito"
+  - "Amplify"
   - "Linux"
+  - "React Native"
+  - "Java"
+  - "Android Studio"
+  - "SQLite"
+  - "AngularJS"
+  - "Scrum"
+  - "Payment gateways"
+  - "ERP integration"
 
 salary:
   usd: 3000
@@ -17,8 +38,8 @@ sites:
   - name: LinkedIn
     url: "https://www.linkedin.com/jobs/search/?keywords=desenvolvedor&location=Brasil&f_WT=2"
     job_selector: ".job-search-card"
-    max_jobs: 5
-    max_scrolls: 10
+    max_jobs: 500
+    max_scrolls: 50
     fields:
       title: ".base-search-card__title"
       company: ".base-search-card__subtitle"

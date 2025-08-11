@@ -34,7 +34,7 @@ def tailor_resume(job: Dict[str, Any], base_resume: str | Path) -> str:
 
     print("🔑 Configuring Gemini API...")
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash-lite")
 
     print("📄 Reading base resume template...")
     base_resume = Path(base_resume).read_text(encoding="utf-8")
