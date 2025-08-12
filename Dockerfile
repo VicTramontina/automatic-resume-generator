@@ -5,14 +5,12 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies and add Google Chrome repository
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     python3-venv \
     texlive-latex-base \
     texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
     texlive-bibtex-extra \
     texlive-lang-english \
     texlive-lang-portuguese \
@@ -28,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
 # Install ChromeDriver that matches the Chrome version
