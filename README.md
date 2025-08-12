@@ -63,7 +63,7 @@ Edite `config/job_config.yaml` para definir os sites e critérios de busca.
 ├── scripts/           # Scripts Python
 ├── Dockerfile         # Definição da imagem Docker
 ├── docker-compose.yml # Configuração Docker Compose
-└── docker-run.sh      # Script conveniente
+└── docker_run.py      # Script conveniente
 ```
 
 ## ✨ Funcionalidades
