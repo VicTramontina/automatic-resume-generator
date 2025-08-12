@@ -11,8 +11,11 @@ import time
 from pathlib import Path
 from typing import Dict, Any
 
+from dotenv import load_dotenv
 import google.generativeai as genai
 from google.api_core.exceptions import ResourceExhausted
+
+load_dotenv()
 
 
 def tailor_resume(job: Dict[str, Any], base_resume: str | Path) -> str:

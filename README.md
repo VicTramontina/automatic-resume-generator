@@ -18,8 +18,8 @@ Este projeto automatiza a busca de vagas remotas, a personalização de um curr�
 
 ### Configuração Inicial
 ```bash
-# Configure sua API key do Gemini
-export GEMINI_API_KEY="sua_chave_aqui"
+# Configure sua API key do Gemini (funciona em Linux, macOS e Windows)
+echo GEMINI_API_KEY=sua_chave_aqui > .env
 ```
 
 ### Execução
@@ -46,9 +46,9 @@ make help    # Mostra ajuda
 
 ### API do Gemini
 1. Obtenha uma chave em [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Configure a variável de ambiente:
+2. Crie um arquivo `.env` na raiz do projeto com o conteúdo:
    ```bash
-   export GEMINI_API_KEY="sua_chave_aqui"
+   GEMINI_API_KEY=sua_chave_aqui
    ```
 
 ### Configuração de Vagas
